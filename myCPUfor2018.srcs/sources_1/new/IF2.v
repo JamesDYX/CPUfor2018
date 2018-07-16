@@ -29,7 +29,7 @@ module IF2(
     );
     IM IM
     (
-        .addra (instr_addr[17:2]),
+        .addra (instr_addr[17:0]),
         .clka (clk),
         .dina (instr_in),
         .douta (instr_out),

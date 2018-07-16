@@ -47,7 +47,7 @@ module MUX_EXT(
                         imme_tohigh;
 endmodule
 
-module MUX_DATA1_SEL(
+module MUX_DATA1(
     input [31:0] rd_1,
     input [4:0] sa,
     input data1_sel,
@@ -58,7 +58,7 @@ module MUX_DATA1_SEL(
     
 endmodule
 
-module MUX_DATA2_SEL(
+module MUX_DATA2(
         input [31:0] rd_2,
         input [31:0] ext_out,
         input data2_sel,

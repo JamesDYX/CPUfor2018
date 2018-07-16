@@ -88,7 +88,3 @@
 `define J 6'b000010
 `define JAL 6'b000011
 
-module define(
-
-    );
-endmodule

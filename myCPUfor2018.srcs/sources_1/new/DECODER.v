@@ -55,6 +55,10 @@ module DECODER(
                    (instr[`OPCODE]==`XORI)? {4'd4,2'b10}:
                    (instr[`OPCODE]==`LB || instr[`OPCODE]==`LBU || instr[`OPCODE]==`LH || instr[`OPCODE]==`LHU || instr[`OPCODE]==`LW)? {4'd9,2'b01}:
                    (instr[`OPCODE]==`SB || instr[`OPCODE]==`SH || instr[`OPCODE]==`SW)? {4'd9,2'b00}:
+                   ({instr[`OPCODE],instr[`RT]}==`BGEZAL)? {4'd15,2'b10}:
+                   ({instr[`OPCODE],instr[`RT]}==`BLTZAL)? {4'd15,2'b10}:
+                   (instr[`OPCODE]==`JALR)? {4'd15,2'b10}:
+                   (instr[`OPCODE]==`JAL)? {4'd15,2'b10}:
                    {4'd15,2'b00};
     assign data1_sel = (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SLL)? 1:
                        (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SRL)? 1:
