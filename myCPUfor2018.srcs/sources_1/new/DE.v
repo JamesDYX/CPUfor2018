@@ -34,9 +34,7 @@ module DE(
     output [31:0] rd2,
     output [31:0] sign_imme,
     output [31:0] unsign_imme,
-    output [31:0] imme_tohigh,
-    output [31:0] pc4_out,
-    output [31:0] instr_out
+    output [31:0] imme_tohigh
     );
     
     wire [4:0] wreg;

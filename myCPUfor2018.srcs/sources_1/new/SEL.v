@@ -35,7 +35,9 @@ module SEL(
     output [31:0] newpc,
     output jump,
     output [31:0] pc8_out,
-    output [3:0] aluop
+    output [3:0] aluop,
+    output [3:0] mult_div_op,
+    output [1:0] memop
     );
     
     wire data1_sel, data2_sel;
@@ -51,7 +53,9 @@ module SEL(
         .mwen(mwen),
         .data1_sel(data1_sel),
         .data2_sel(data2_sel),
-        .ext_sel(ext_sel)
+        .ext_sel(ext_sel),
+        .mult_div_op(mult_div_op),
+        .memop(memop)
     );
     
     MUX_EXT MUX_EXT(

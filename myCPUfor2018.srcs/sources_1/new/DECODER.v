@@ -23,11 +23,13 @@
 module DECODER(
     input [31:0] instr,
     output [3:0] aluop,
+    output [3:0] mult_div_op,
     output grfwen,
     output mwen,
     output data1_sel,
     output data2_sel,
-    output [1:0] ext_sel
+    output [1:0] ext_sel,
+    output [1:0] memop
     );
     assign {aluop,grfwen, mwen} = 
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`ADD)? {4'd0,2'b10}:
@@ -46,6 +48,8 @@ module DECODER(
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SRA)? {4'd8,2'b10}:
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SRLV)? {4'd7,2'b10}:
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SRL)? {4'd7,2'b10}:
+                   (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MFHI)? {4'd15,2'b10}:
+                   (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MFLO)? {4'd15,2'b10}:
                    (instr[`OPCODE]==`ADDI)? {4'd0,2'b10}:
                    (instr[`OPCODE]==`ADDIU)? {4'd9,2'b10}:
                    (instr[`OPCODE]==`SLTI)? {4'd5,2'b10}:
@@ -82,4 +86,18 @@ module DECODER(
                           (instr[`OPCODE]==`SB)? 1:
                           (instr[`OPCODE]==`SH)? 1:
                           0;
+     assign mult_div_op = (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MULT)? 4'b0001:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MULTU)? 4'b0010:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`DIV)? 4'b0011:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`DIVU)? 4'b0100:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MFHI)? 4'b0101:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MFLO)? 4'b0110:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MTHI)? 4'b0111:
+                          (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MTLO)? 4'b1000:
+                          4'b0000;
+      
+     assign memop = (instr[`OPCODE]==`SH || instr[`OPCODE]==`LH || instr[`OPCODE]==`LHU)? 2'b01:
+                    (instr[`OPCODE]==`SB || instr[`OPCODE]==`LB || instr[`OPCODE]==`LBU)? 2'b10:
+                    2'b00;
+    
 endmodule

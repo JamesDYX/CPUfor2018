@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="DM_synth_1" LaunchPart="xc7a200tfbg676-2" LaunchTime="1531751588">
+<GenRun Id="DM_synth_1" LaunchPart="xc7a200tfbg676-2" LaunchTime="1531923504">
   <File Type="PA-TCL" Name="DM.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="DM_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="DM_reports.tcl"/>
@@ -12,7 +12,6 @@
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/DM">
     <File Path="$PSRCDIR/sources_1/ip/DM/DM.xci">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -26,7 +25,6 @@
   <FileSet Name="constrs_in" Type="BlockSrcs" RelSrcDir="$PSRCDIR/DM">
     <File Path="$PSRCDIR/sources_1/ip/DM/DM.xci">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -38,9 +36,7 @@
     </Config>
   </FileSet>
   <Strategy Version="1" Minor="2">
-    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2018">
-      <Desc>Vivado Synthesis Defaults</Desc>
-    </StratHandle>
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2018"/>
     <Step Id="synth_design"/>
   </Strategy>
 </GenRun>

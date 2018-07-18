@@ -24,6 +24,8 @@ module IF1(
     input clk,
     input rst,
     input stall,
+    input jump,
+    input [31:0] newpc,
     output [31:0] instr_addr
     );
     
@@ -34,7 +36,10 @@ module IF1(
             PC <= `INIT_PC;
         end
         else if(~stall) begin
-            PC <= PC+4;
+            if(jump && newpc!=PC-8)
+                PC <= newpc;
+            else 
+                PC <= PC+4;
         end
     end
     

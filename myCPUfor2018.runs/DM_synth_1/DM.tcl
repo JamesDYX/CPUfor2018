@@ -16,8 +16,6 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
-set_msg_config -id {HDL 9-1061} -limit 100000
-set_msg_config -id {HDL 9-1654} -limit 100000
 set_param project.vivado.isBlockSynthRun true
 set_msg_config -msgmgr_mode ooc_run
 create_project -in_memory -part xc7a200tfbg676-2
@@ -33,7 +31,7 @@ set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo d:/myCPUfor2018/myCPUfor2018.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-read_ip -quiet d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM.xci
+read_ip -quiet D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM.xci
 set_property used_in_implementation false [get_files -all d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -88,32 +86,32 @@ write_checkpoint -force -noxdef DM.dcp
 create_report "DM_synth_1_synth_report_utilization_0" "report_utilization -file DM_utilization_synth.rpt -pb DM_utilization_synth.pb"
 
 if { [catch {
-  file copy -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM.dcp d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM.dcp
+  file copy -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM.dcp D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  write_verilog -force -mode synth_stub d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.v
+  write_verilog -force -mode synth_stub D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode synth_stub d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.vhdl
+  write_vhdl -force -mode synth_stub D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_verilog -force -mode funcsim d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.v
+  write_verilog -force -mode funcsim D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode funcsim d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.vhdl
+  write_vhdl -force -mode funcsim D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -123,32 +121,32 @@ if { [catch {
 
 
 if { [catch {
-  file copy -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM.dcp d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM.dcp
+  file copy -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM.dcp D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_stub.v d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.v
+  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_stub.v D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_stub.vhdl d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.vhdl
+  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_stub.vhdl D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_sim_netlist.v d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.v
+  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_sim_netlist.v D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_sim_netlist.vhdl d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.vhdl
+  file rename -force D:/myCPUfor2018/myCPUfor2018.runs/DM_synth_1/DM_sim_netlist.vhdl D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -157,13 +155,13 @@ if { [catch {
 
 if {[file isdir D:/myCPUfor2018/myCPUfor2018.ip_user_files/ip/DM]} {
   catch { 
-    file copy -force d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.v D:/myCPUfor2018/myCPUfor2018.ip_user_files/ip/DM
+    file copy -force D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.v D:/myCPUfor2018/myCPUfor2018.ip_user_files/ip/DM
   }
 }
 
 if {[file isdir D:/myCPUfor2018/myCPUfor2018.ip_user_files/ip/DM]} {
   catch { 
-    file copy -force d:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.vhdl D:/myCPUfor2018/myCPUfor2018.ip_user_files/ip/DM
+    file copy -force D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/DM/DM_stub.vhdl D:/myCPUfor2018/myCPUfor2018.ip_user_files/ip/DM
   }
 }
 file delete __synthesis_is_running__
