@@ -30,13 +30,15 @@ module MEM2_WB(
     input [31:0] mdata_MEM2,
     input [31:0] hi_MEM2,
     input [31:0] lo_MEM2,
+    input [31:0] harzard_ctrl_MEM2,
     output reg reg_wen_WB,
     output reg [31:0] instr_WB,
     output reg [31:0] pc8_WB,
     output reg [31:0] aluresult_WB,
     output reg [31:0] mdata_WB,
     output reg [31:0] hi_WB,
-    output reg [31:0] lo_WB
+    output reg [31:0] lo_WB,
+    output reg [31:0] harzard_ctrl_WB
     );
     
     always @(posedge clk) begin
@@ -48,6 +50,7 @@ module MEM2_WB(
             mdata_WB<=0;
             hi_WB<=0;
             lo_WB<=0;
+            harzard_ctrl_WB<=0;
         end
         else begin
             reg_wen_WB <= reg_wen_MEM2;
@@ -57,6 +60,7 @@ module MEM2_WB(
             mdata_WB<=mdata_MEM2;
             hi_WB<=hi_MEM2;
             lo_WB<=lo_MEM2;
+            harzard_ctrl_WB<=harzard_ctrl_MEM2[2:0]==0?harzard_ctrl_MEM2:(harzard_ctrl_MEM2-1);
         end
     end
     

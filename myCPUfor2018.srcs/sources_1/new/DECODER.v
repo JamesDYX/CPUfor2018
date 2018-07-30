@@ -29,7 +29,8 @@ module DECODER(
     output data1_sel,
     output data2_sel,
     output [1:0] ext_sel,
-    output [1:0] memop
+    output [1:0] memop,
+    output [31:0] harzard_ctrl
     );
     assign {aluop,grfwen, mwen} = 
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`ADD)? {4'd0,2'b10}:
@@ -100,4 +101,89 @@ module DECODER(
                     (instr[`OPCODE]==`SB || instr[`OPCODE]==`LB || instr[`OPCODE]==`LBU)? 2'b10:
                     2'b00;
     
+    assign harzard_ctrl[`RS] = (instr[`OPCODE]==`J | instr[`OPCODE]==`JAL)? 5'b00000:
+                               instr==`ERET? 5'b00000:
+                               instr[31:21]==`MTC0? 5'b00000:
+                               instr[31:21]==`MFC0? 5'b00000:
+                               (instr[31:21]==6'b000000 & (instr[`FUNC]==`BREAK | instr[`FUNC]==`SYSCALL | instr[`FUNC]==`MFHI | instr[`FUNC]==`MFLO))? 5'b00000:
+                               instr[`RS];
+    assign harzard_ctrl[`RT] = (instr[`OPCODE]==6'b000000 & instr[`FUNC]!=`BREAK & instr[`FUNC]!=`SYSCALL)? instr[`RT]:
+                               (instr[`OPCODE]==`BEQ | instr[`OPCODE]==`BNE | instr[`OPCODE]==`SW | instr[`OPCODE]==`SH | instr[`OPCODE]==`SB)? instr[`RT]:
+                               instr[31:21]==`MTC0? instr[`RT]:
+                               5'b00000;
+                               
+    assign harzard_ctrl[`RD] = (instr[`OPCODE]==6'b000000 & instr[`FUNC]==`DIV)? 5'b00000:
+                               (instr[`OPCODE]==6'b000000 & instr[`FUNC]==`DIVU)? 5'b00000:
+                               (instr[`OPCODE]==6'b000000 & instr[`FUNC]==`MULT)? 5'b00000:
+                               (instr[`OPCODE]==6'b000000 & instr[`FUNC]==`MULTU)? 5'b00000:
+                               (instr[`OPCODE]==6'b000000 & instr[`FUNC]==`BREAK)? 5'b00000:
+                               (instr[`OPCODE]==6'b000000 & instr[`FUNC]==`SYSCALL)? 5'b00000:
+                               (instr[`OPCODE]==`SW | instr[`OPCODE]==`SH | instr[`OPCODE]==`SB)? 5'b00000:
+                               (instr[`OPCODE]==`BEQ | instr[`OPCODE]==`BNE)? 5'b00000:
+                               ({instr[`OPCODE],instr[`RT]}==`BGEZ)? 5'b00000:
+                               ({instr[`OPCODE],instr[`RT]}==`BGTZ)? 5'b00000:
+                               ({instr[`OPCODE],instr[`RT]}==`BLEZ)? 5'b00000:
+                               ({instr[`OPCODE],instr[`RT]}==`BLTZ)? 5'b00000:
+                               instr[`OPCODE]==`J? 5'b00000:
+                               instr==`ERET? 5'b00000:
+                               instr[31:21]==`MTC0? 5'b00000:
+                               instr[`OPCODE]==`JAL? 5'b11111:
+                               ({instr[`OPCODE],instr[`RT]}==`BGEZAL)? 5'b11111:
+                               ({instr[`OPCODE],instr[`RT]}==`BLTZAL)? 5'b11111:
+                               (instr[`OPCODE]==5'b00000)? instr[`RD]:
+                               instr[`RT];
+    assign harzard_ctrl[8:0] = (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`ADD)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`ADDU)? {3'd1, 3'd1, 3'd2}:  
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SUB)? {3'd1, 3'd1, 3'd2}:   
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SUBU)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SLT)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SLTU)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`DIV)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`DIVU)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MULT)? {3'd1, 3'd1, 3'd2}:    
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MULTU)? {3'd1, 3'd1, 3'd2}:     
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`AND)? {3'd1, 3'd1, 3'd2}: 
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`NOR)? {3'd1, 3'd1, 3'd2}: 
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`OR)? {3'd1, 3'd1, 3'd2}:      
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`XOR)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SLLV)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SLL)? {3'd0, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SRAV)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SRA)? {3'd0, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SRLV)? {3'd1, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SRL)? {3'd0, 3'd1, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`JR)? {3'd0, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`JALR)? {3'd0, 3'd0, 3'd1}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MFHI)? {3'd0, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MFLO)? {3'd0, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MTHI)? {3'd1, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MTLO)? {3'd1, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==`ADDI)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`ADDIU)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`SLTI)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`SLTIU)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`ANDI)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`LUI)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`ORI)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`XORI)? {3'd1, 3'd0, 3'd2}:
+                               (instr[`OPCODE]==`LB)? {3'd1, 3'd0, 3'd4}:
+                               (instr[`OPCODE]==`LBU)? {3'd1, 3'd0, 3'd4}:
+                               (instr[`OPCODE]==`LH)? {3'd1, 3'd0, 3'd4}:
+                               (instr[`OPCODE]==`LHU)? {3'd1, 3'd0, 3'd4}:
+                               (instr[`OPCODE]==`LW)? {3'd1, 3'd0, 3'd4}:
+                               (instr[`OPCODE]==`SB)? {3'd1, 3'd2, 3'd0}:
+                               (instr[`OPCODE]==`SH)? {3'd1, 3'd2, 3'd0}:
+                               (instr[`OPCODE]==`SW)? {3'd1, 3'd2, 3'd0}:
+                               (instr[`OPCODE]==`BEQ)? {3'd0, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==`BNE)? {3'd0, 3'd0, 3'd0}:
+                               ({instr[`OPCODE],instr[`RT]}==`BGEZ)? {3'd0, 3'd0, 3'd0}:
+                               ({instr[`OPCODE],instr[`RT]}==`BGTZ)? {3'd0, 3'd0, 3'd0}:
+                               ({instr[`OPCODE],instr[`RT]}==`BLEZ)? {3'd0, 3'd0, 3'd0}:
+                               ({instr[`OPCODE],instr[`RT]}==`BLTZ)? {3'd0, 3'd0, 3'd0}:
+                               ({instr[`OPCODE],instr[`RT]}==`BGEZAL)? {3'd0, 3'd0, 3'd1}:
+                               ({instr[`OPCODE],instr[`RT]}==`BLTZAL)? {3'd0, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==`J)? {3'd0, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==`JAL)? {3'd0, 3'd0, 3'd1}:
+                               9'd0;
+    assign {harzard_ctrl[`OPCODE],harzard_ctrl[10:9]} = 8'b0;
 endmodule

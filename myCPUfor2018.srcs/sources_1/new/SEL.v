@@ -37,12 +37,27 @@ module SEL(
     output [31:0] pc8_out,
     output [3:0] aluop,
     output [3:0] mult_div_op,
-    output [1:0] memop
+    output [1:0] memop,
+    output [32:0] harzard_ctrl,
+    input [4:0] regd_1,
+    input [2:0] T_new_1,
+    input [31:0] data_1,
+    input [4:0] regd_2,
+    input [2:0] T_new_2,
+    input [31:0] data_2,
+    input [4:0] regd_3,
+    input [2:0] T_new_3,
+    input [31:0] data_3,
+    input [4:0] regd_4,
+    input [2:0] T_new_4,
+    input [31:0] data_4,
+    output not_jump
     );
     
     wire data1_sel, data2_sel;
     wire [1:0] ext_sel;
     wire [31:0] data2_imme;
+    wire [31:0] data1_i, data2_i;
     
     assign pc8_out = pc4_in + 4;
     
@@ -55,7 +70,8 @@ module SEL(
         .data2_sel(data2_sel),
         .ext_sel(ext_sel),
         .mult_div_op(mult_div_op),
-        .memop(memop)
+        .memop(memop),
+        .harzard_ctrl(harzard_ctrl)
     );
     
     MUX_EXT MUX_EXT(
@@ -80,13 +96,50 @@ module SEL(
         .data_2(data2)
     );
     
+    HAZARD_FORWARD HARZARD_FORWARD_SEL_rs(
+        .r(harzard_ctrl[`RS]),
+        .data_in(data1),
+        .rd_1(regd_1),
+        .T_new_1(T_new_1),
+        .data_1(data_1),
+        .rd_2(regd_2),
+        .T_new_2(T_new_2),
+        .data_2(data_2),
+        .rd_3(regd_3),
+        .T_new_3(T_new_3),
+        .data_3(data_3),
+        .rd_4(regd_4),
+        .T_new_4(T_new_4),
+        .data_4(data_4),
+        .data_out(data1_i)
+    );
+    
+    HAZARD_FORWARD HARZARD_FORWARD_SEL_rt(
+        .r(harzard_ctrl[`RT]),
+        .data_in(data2),
+        .rd_1(regd_1),
+        .T_new_1(T_new_1),
+        .data_1(data_1),
+        .rd_2(regd_2),
+        .T_new_2(T_new_2),
+        .data_2(data_2),
+        .rd_3(regd_3),
+        .T_new_3(T_new_3),
+        .data_3(data_3),
+        .rd_4(regd_4),
+        .T_new_4(T_new_4),
+        .data_4(data_4),
+        .data_out(data2_i)
+    );
+    
     Branch Branch(
         .instr(instr_in),
-        .data1(data1),
-        .data2(data2),
+        .data1(data1_i),
+        .data2(data2_i),
         .pc4(pc4_in),
         .newpc(newpc),
-        .jump(jump)
+        .jump(jump),
+        .not_jump(not_jump)
     );
     
 endmodule

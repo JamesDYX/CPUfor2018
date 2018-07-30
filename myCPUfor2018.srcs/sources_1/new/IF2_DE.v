@@ -23,6 +23,7 @@
 module IF2_DE(
     input clk,
     input rst,
+    input clr,
     input en,
     input [31:0] instr_IF2,
     input [31:0] pc4_IF2,
@@ -31,7 +32,7 @@ module IF2_DE(
     );
     
     always @(posedge clk) begin
-        if(rst) begin
+        if(rst | clr) begin
             instr_DE <=0 ;
             pc4_DE <=0;
         end

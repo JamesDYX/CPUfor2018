@@ -26,17 +26,19 @@ module IF1(
     input stall,
     input jump,
     input [31:0] newpc,
-    output [31:0] instr_addr
+    output [31:0] instr_addr,
+    output wrong_guess
     );
     
     reg [31:0] PC;
     assign instr_addr = PC;
+    assign wrong_guess = jump & (newpc!=PC-4);
     always @(posedge clk) begin
         if (rst) begin
             PC <= `INIT_PC;
         end
         else if(~stall) begin
-            if(jump && newpc!=PC-8)
+            if(wrong_guess)
                 PC <= newpc;
             else 
                 PC <= PC+4;

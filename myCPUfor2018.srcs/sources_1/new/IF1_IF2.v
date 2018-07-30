@@ -24,13 +24,14 @@ module IF1_IF2(
     input clk,
     input rst,
     input en,
+    input clr,
     input [31:0] pc_in,
     output reg [31:0] pc_out,
     output reg [31:0] pc4_out
     );
     
     always @(posedge clk) begin
-        if(rst) begin
+        if(rst | clr) begin
             pc_out<=0;
             pc4_out<=0;
         end

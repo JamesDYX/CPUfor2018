@@ -83,8 +83,12 @@
 `define SB 6'b101000
 `define SH 6'b101001    //AddrError
 `define SW 6'b101011    //AddrError
+`define MFC0 11'b01000000000
+`define MTC0 11'b01000000100
+
 
 
 `define J 6'b000010
 `define JAL 6'b000011
 
+`define ERET 32'h42000018

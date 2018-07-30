@@ -33,6 +33,7 @@ module EX_MEM1(
     input overflow_EX,
     input [1:0] memop_EX,
     input [31:0] rd2_EX,
+    input [31:0] harzard_ctrl_EX,
     output reg [31:0] pc8_MEM1,
     output reg [31:0] instr_MEM1,
     output reg [31:0] aluresult_MEM1,
@@ -42,7 +43,8 @@ module EX_MEM1(
     output reg mwen_MEM1,
     output reg overflow_MEM1,
     output reg [1:0] memop_MEM1,
-    output reg [31:0] rd2_MEM1
+    output reg [31:0] rd2_MEM1,
+    output reg [31:0] harzard_ctrl_MEM1
     );
     
     always @(posedge clk) begin
@@ -57,6 +59,7 @@ module EX_MEM1(
             overflow_MEM1<=0;
             memop_MEM1<=0;
             rd2_MEM1<=0;
+            harzard_ctrl_MEM1<=0;
         end
         else begin
             pc8_MEM1<=pc8_EX;
@@ -69,6 +72,7 @@ module EX_MEM1(
             overflow_MEM1<=0;
             memop_MEM1<=memop_EX;
             rd2_MEM1<=rd2_EX;
+            harzard_ctrl_MEM1<=harzard_ctrl_EX[2:0]==0?harzard_ctrl_EX:(harzard_ctrl_EX-1);
         end
     end
     
