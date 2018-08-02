@@ -27,6 +27,7 @@ module WB(
     input [31:0] mdata,
     input [31:0] hi,
     input [31:0] lo,
+    input [31:0] CP0,
     output [31:0] reg_data,
     output [4:0] reg_rt,
     output [4:0] reg_rd,
@@ -53,6 +54,7 @@ module WB(
                       (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`JALR)? pc8:
                       {instr[`OPCODE], instr[`RT]}==`BGEZAL? pc8:
                       {instr[`OPCODE], instr[`RT]}==`BLTZAL? pc8:
+                      (instr[31:21]==`MFC0)? CP0:
                       aluresult;
                       
      assign reg_rt = instr[`RT];

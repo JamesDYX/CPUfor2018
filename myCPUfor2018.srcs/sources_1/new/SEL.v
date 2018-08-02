@@ -38,7 +38,10 @@ module SEL(
     output [3:0] aluop,
     output [3:0] mult_div_op,
     output [1:0] memop,
-    output [32:0] harzard_ctrl,
+    output [31:0] harzard_ctrl,
+    output data1_sel,
+    output data2_sel,
+    output [31:0] data2_imme,
     input [4:0] regd_1,
     input [2:0] T_new_1,
     input [31:0] data_1,
@@ -51,13 +54,12 @@ module SEL(
     input [4:0] regd_4,
     input [2:0] T_new_4,
     input [31:0] data_4,
-    output not_jump
+    output not_jump,
+    output next_in_delay,
+    output reserved_ins_exl
     );
     
-    wire data1_sel, data2_sel;
     wire [1:0] ext_sel;
-    wire [31:0] data2_imme;
-    wire [31:0] data1_i, data2_i;
     
     assign pc8_out = pc4_in + 4;
     
@@ -71,7 +73,8 @@ module SEL(
         .ext_sel(ext_sel),
         .mult_div_op(mult_div_op),
         .memop(memop),
-        .harzard_ctrl(harzard_ctrl)
+        .harzard_ctrl(harzard_ctrl),
+        .reserved_ins_exl(reserved_ins_exl)
     );
     
     MUX_EXT MUX_EXT(
@@ -82,23 +85,11 @@ module SEL(
         .data2_imme(data2_imme)
     );
     
-    MUX_DATA1 MUX_DATA1(
-        .rd_1(rd_1),
-        .sa(instr_in[`SA]),
-        .data1_sel(data1_sel),
-        .data_1(data1)
-    );
-    
-    MUX_DATA2 MUX_DATA2(
-        .rd_2(rd_2),
-        .ext_out(data2_imme),
-        .data2_sel(data2_sel),
-        .data_2(data2)
-    );
+
     
     HAZARD_FORWARD HARZARD_FORWARD_SEL_rs(
         .r(harzard_ctrl[`RS]),
-        .data_in(data1),
+        .data_in(rd_1),
         .rd_1(regd_1),
         .T_new_1(T_new_1),
         .data_1(data_1),
@@ -111,12 +102,12 @@ module SEL(
         .rd_4(regd_4),
         .T_new_4(T_new_4),
         .data_4(data_4),
-        .data_out(data1_i)
+        .data_out(data1)
     );
     
     HAZARD_FORWARD HARZARD_FORWARD_SEL_rt(
         .r(harzard_ctrl[`RT]),
-        .data_in(data2),
+        .data_in(rd_2),
         .rd_1(regd_1),
         .T_new_1(T_new_1),
         .data_1(data_1),
@@ -129,17 +120,18 @@ module SEL(
         .rd_4(regd_4),
         .T_new_4(T_new_4),
         .data_4(data_4),
-        .data_out(data2_i)
+        .data_out(data2)
     );
     
     Branch Branch(
         .instr(instr_in),
-        .data1(data1_i),
-        .data2(data2_i),
+        .data1(data1),
+        .data2(data2),
         .pc4(pc4_in),
         .newpc(newpc),
         .jump(jump),
-        .not_jump(not_jump)
+        .not_jump(not_jump),
+        .next_in_delay(next_in_delay)
     );
     
 endmodule

@@ -1,0 +1,59 @@
+Vivado Simulator 2018.1
+Copyright 1986-1999, 2001-2017 Xilinx, Inc. All Rights Reserved.
+Running: D:/Vivado/2018.1/bin/unwrapped/win64.o/xelab.exe -wto 5d997b0142a240f1ab228876f938affe --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_1 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot testbench_cpu_behav xil_defaultlib.testbench_cpu xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_4 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:271]
+WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_4 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:289]
+WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_3 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:367]
+WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_4 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:370]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.IF1
+Compiling module xil_defaultlib.IF1_IF2
+Compiling module xil_defaultlib.IF2_DE
+Compiling module xil_defaultlib.MUX_GRF
+Compiling module xil_defaultlib.GRF
+Compiling module xil_defaultlib.SEXT
+Compiling module xil_defaultlib.DE
+Compiling module xil_defaultlib.DE_SEL
+Compiling module xil_defaultlib.DECODER
+Compiling module xil_defaultlib.MUX_EXT
+Compiling module xil_defaultlib.HAZARD_FORWARD
+Compiling module xil_defaultlib.Branch
+Compiling module xil_defaultlib.SEL
+Compiling module xil_defaultlib.HARZARD_STALL
+Compiling module xil_defaultlib.SEL_EX
+Compiling module xil_defaultlib.FORWARD_DATA_MUX
+Compiling module xil_defaultlib.MUX_DATA1
+Compiling module xil_defaultlib.MUX_DATA2
+Compiling module xil_defaultlib.ALU
+Compiling module xil_defaultlib.div_model
+Compiling module xil_defaultlib.mult_model
+Compiling module xil_defaultlib.MULT_DIV
+Compiling module xil_defaultlib.EX
+Compiling module xil_defaultlib.EX_MEM1
+Compiling module xil_defaultlib.MEM1
+Compiling module xil_defaultlib.CP0
+Compiling module xil_defaultlib.MEM1_MEM2
+Compiling module xil_defaultlib.MEM2_WB
+Compiling module xil_defaultlib.WB
+Compiling module xil_defaultlib.DATAPATH
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_output_stage(...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_output_stage(...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1(C_FAMILY="art...
+Compiling module xil_defaultlib.IM
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_output_stage(...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_output_stage(...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1(C_FAMILY="art...
+Compiling module xil_defaultlib.DM
+Compiling module xil_defaultlib.soc_sram
+Compiling module xil_defaultlib.testbench_cpu
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot testbench_cpu_behav

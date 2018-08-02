@@ -34,8 +34,8 @@ module GRF(
     
     integer i;
     reg [31:0] registers [31:0];
-    assign rd1 = (wen && wreg==r1)? data : registers[r1];
-    assign rd2 = (wen && wreg==r2)? data : registers[r2];
+    assign rd1 = (wen && wreg==r1 && wreg!=0)? data : registers[r1];
+    assign rd2 = (wen && wreg==r2 && wreg!=0)? data : registers[r2];
     
     always @(posedge clk) begin
         if(rst) begin
@@ -45,6 +45,7 @@ module GRF(
         end
         else if(wen && wreg!=0) begin
             registers[wreg] <= data;
+            $display("$%d <= %h", wreg,data);
         end
     end
 endmodule

@@ -29,22 +29,16 @@ module MEM1_MEM2(
     input [31:0] hi_MEM1,
     input [31:0] lo_MEM1,
     input reg_wen_MEM1,
-    input mwen_MEM1,
-    input overflow_MEM1,
-    input [1:0] memop_MEM1,
-    input rd2_MEM1,
     input [31:0] harzard_ctrl_MEM1,
+    input [31:0] CP0_MEM1,
     output reg [31:0] pc8_MEM2,
     output reg [31:0] instr_MEM2,
     output reg [31:0] aluresult_MEM2,
     output reg [31:0] hi_MEM2,
     output reg [31:0] lo_MEM2,
     output reg reg_wen_MEM2,
-    output reg mwen_MEM2,
-    output reg overflow_MEM2,
-    output reg [1:0] memop_MEM2,
-    output reg rd2_MEM2,
-    output reg harzard_ctrl_MEM2
+    output reg [31:0] harzard_ctrl_MEM2,
+    output reg [31:0] CP0_MEM2
     );
     
     always @(posedge clk) begin
@@ -55,11 +49,8 @@ module MEM1_MEM2(
             hi_MEM2<=0;
             lo_MEM2<=0;
             reg_wen_MEM2<=0;
-            mwen_MEM2<=0;
-            overflow_MEM2<=0;
-            memop_MEM2<=0;
-            rd2_MEM2<=0;
             harzard_ctrl_MEM2<=0;
+            CP0_MEM2<=0;
         end
         else begin
             pc8_MEM2<=pc8_MEM1;
@@ -68,11 +59,8 @@ module MEM1_MEM2(
             hi_MEM2<=hi_MEM1;
             lo_MEM2<=lo_MEM1;
             reg_wen_MEM2<=reg_wen_MEM1;
-            mwen_MEM2<=mwen_MEM1;
-            overflow_MEM2<=overflow_MEM1;
-            memop_MEM2<=memop_MEM1;
-            rd2_MEM2<=rd2_MEM1;
             harzard_ctrl_MEM2<=harzard_ctrl_MEM1[2:0]==0?harzard_ctrl_MEM1:(harzard_ctrl_MEM1-1);
+            CP0_MEM2<=CP0_MEM1;
         end
     end
 endmodule

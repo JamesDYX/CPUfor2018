@@ -27,11 +27,13 @@ module IF1(
     input jump,
     input [31:0] newpc,
     output [31:0] instr_addr,
-    output wrong_guess
+    output wrong_guess,
+    output ins_addr_exl
     );
     
     reg [31:0] PC;
     assign instr_addr = PC;
+    assign ins_addr_exl = instr_addr[1:0]!=2'b0;
     assign wrong_guess = jump & (newpc!=PC-4);
     always @(posedge clk) begin
         if (rst) begin

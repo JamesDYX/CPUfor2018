@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`define INIT_PC 32'h0000_0000
+`define INIT_PC 32'h0003_0000
 
 `define OPCODE 31:26
 `define RS 25:21

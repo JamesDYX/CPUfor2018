@@ -27,18 +27,22 @@ module IF2_DE(
     input en,
     input [31:0] instr_IF2,
     input [31:0] pc4_IF2,
+    input ins_addr_exl_IF2,
     output reg [31:0] instr_DE,
-    output reg [31:0] pc4_DE
+    output reg [31:0] pc4_DE,
+    output reg ins_addr_exl_DE
     );
     
     always @(posedge clk) begin
         if(rst | clr) begin
             instr_DE <=0 ;
             pc4_DE <=0;
+            ins_addr_exl_DE<=0;
         end
         else if(en) begin
             instr_DE <= instr_IF2;
             pc4_DE <= pc4_IF2;
+            ins_addr_exl_DE<=ins_addr_exl_IF2;
         end
     end
 endmodule

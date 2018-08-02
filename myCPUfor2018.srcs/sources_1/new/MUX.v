@@ -54,7 +54,7 @@ module MUX_DATA1(
     output [31:0] data_1
     );
     
-    assign data_1 = data1_sel==1? rd_1: {27'd0,sa};
+    assign data_1 = data1_sel==0? rd_1: {27'd0,sa};
     
 endmodule
 

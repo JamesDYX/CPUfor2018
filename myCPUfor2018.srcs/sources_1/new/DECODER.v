@@ -30,8 +30,12 @@ module DECODER(
     output data2_sel,
     output [1:0] ext_sel,
     output [1:0] memop,
-    output [31:0] harzard_ctrl
+    output [31:0] harzard_ctrl,
+    output reserved_ins_exl
     );
+    
+    assign reserved_ins_exl = harzard_ctrl[8:0]==9'b111111111;
+    
     assign {aluop,grfwen, mwen} = 
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`ADD)? {4'd0,2'b10}:
                    (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`ADDU)? {4'd9,2'b10}:
@@ -58,18 +62,23 @@ module DECODER(
                    (instr[`OPCODE]==`ANDI)? {4'd2,2'b10}:
                    (instr[`OPCODE]==`ORI)? {4'd3,2'b10}:
                    (instr[`OPCODE]==`XORI)? {4'd4,2'b10}:
-                   (instr[`OPCODE]==`LB || instr[`OPCODE]==`LBU || instr[`OPCODE]==`LH || instr[`OPCODE]==`LHU || instr[`OPCODE]==`LW)? {4'd9,2'b01}:
-                   (instr[`OPCODE]==`SB || instr[`OPCODE]==`SH || instr[`OPCODE]==`SW)? {4'd9,2'b00}:
+                   (instr[`OPCODE]==`LUI)? {4'd13,2'b10}:
+                   (instr[`OPCODE]==`LB || instr[`OPCODE]==`LBU || instr[`OPCODE]==`LH || instr[`OPCODE]==`LHU || instr[`OPCODE]==`LW)? {4'd9,2'b10}:
+                   (instr[`OPCODE]==`SB || instr[`OPCODE]==`SH || instr[`OPCODE]==`SW)? {4'd9,2'b01}:
                    ({instr[`OPCODE],instr[`RT]}==`BGEZAL)? {4'd15,2'b10}:
                    ({instr[`OPCODE],instr[`RT]}==`BLTZAL)? {4'd15,2'b10}:
                    (instr[`OPCODE]==`JALR)? {4'd15,2'b10}:
                    (instr[`OPCODE]==`JAL)? {4'd15,2'b10}:
+                   (instr[31:21]==`MFC0)? {4'd15,2'b10}:
                    {4'd15,2'b00};
     assign data1_sel = (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SLL)? 1:
                        (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SRL)? 1:
                        (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`SRA)? 1:
                        0;
-    assign data2_sel = (instr[`OPCODE]==6'b000000)? 0:1;
+    assign data2_sel = (instr[`OPCODE]==`BEQ)? 0:
+                       (instr[`OPCODE]==`BNE)? 0:
+                       (instr[31:21]==`MFC0)? 0:
+                       (instr[`OPCODE]==6'b000000)? 0:1;
     assign ext_sel = (instr[`OPCODE]==`ADDI)? 1:
                           (instr[`OPCODE]==`ADDIU)? 1:
                           (instr[`OPCODE]==`SLTI)? 1:
@@ -158,6 +167,8 @@ module DECODER(
                                (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MFLO)? {3'd0, 3'd0, 3'd2}:
                                (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MTHI)? {3'd1, 3'd0, 3'd0}:
                                (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`MTLO)? {3'd1, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`BREAK)? {3'd0, 3'd0, 3'd0}:
+                               (instr[`OPCODE]==6'b000000 &&  instr[`FUNC]==`SYSCALL)? {3'd0, 3'd0, 3'd0}:
                                (instr[`OPCODE]==`ADDI)? {3'd1, 3'd0, 3'd2}:
                                (instr[`OPCODE]==`ADDIU)? {3'd1, 3'd0, 3'd2}:
                                (instr[`OPCODE]==`SLTI)? {3'd1, 3'd0, 3'd2}:
@@ -184,6 +195,9 @@ module DECODER(
                                ({instr[`OPCODE],instr[`RT]}==`BLTZAL)? {3'd0, 3'd0, 3'd0}:
                                (instr[`OPCODE]==`J)? {3'd0, 3'd0, 3'd0}:
                                (instr[`OPCODE]==`JAL)? {3'd0, 3'd0, 3'd1}:
-                               9'd0;
+                               (instr==`ERET)? {3'd0, 3'd0, 3'd0}:
+                               instr[31:21]==`MFC0? {3'd0, 3'd0, 3'd3}:
+                               instr[31:21]==`MTC0? {3'd0, 3'd2, 3'd0}:
+                               9'b111111111;
     assign {harzard_ctrl[`OPCODE],harzard_ctrl[10:9]} = 8'b0;
 endmodule

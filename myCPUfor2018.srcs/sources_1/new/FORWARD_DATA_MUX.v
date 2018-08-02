@@ -26,6 +26,7 @@ module FORWARD_DATA_MUX(
     input [31:0] lo,
     input [31:0] pc8,
     input [31:0] instr,
+    input [31:0] CP0,
     output [31:0] data_o
     );
     
@@ -35,6 +36,7 @@ module FORWARD_DATA_MUX(
                     (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`JALR)? pc8:
                     {instr[`OPCODE], instr[`RT]}==`BGEZAL? pc8:
                     {instr[`OPCODE], instr[`RT]}==`BLTZAL? pc8:
+                    (instr[31:21]==`MFC0)? CP0:
                      alu_result;
     
 endmodule

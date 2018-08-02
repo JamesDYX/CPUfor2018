@@ -44,6 +44,7 @@ module ALU(
                     aluop==10? data1-data2: //不考虑溢出的减法
                     aluop==11? (data1<data2?1:0):
                     aluop==12? ~(data1|data2):
+                    aluop==13? data2:
                     0;
      assign overflow = (aluop==1 | aluop==2) & (tmp[32]!=tmp[31]);
                     

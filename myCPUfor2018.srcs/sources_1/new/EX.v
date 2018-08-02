@@ -27,16 +27,36 @@ module EX(
     input [3:0] mult_div_op,
     input [31:0] data1,
     input [31:0] data2,
+    input data1_sel,
+    input data2_sel,
+    input [31:0] data2_imme,
+    input [4:0] sa,
     output [31:0] hi,
     output [31:0] lo,
     output busy,
-    output ALUResult,
+    output [31:0] ALUResult,
     output overflow
     );
     
+    wire [31:0] alu_data1, alu_data2;
+    
+    MUX_DATA1 MUX_DATA1(
+        .rd_1(data1),
+        .sa(sa),
+        .data1_sel(data1_sel),
+        .data_1(alu_data1)
+    );
+    
+    MUX_DATA2 MUX_DATA2(
+        .rd_2(data2),
+        .ext_out(data2_imme),
+        .data2_sel(data2_sel),
+        .data_2(alu_data2)
+    );
+    
     ALU ALU(
-        .data1(data1),
-        .data2(data2),
+        .data1(alu_data1),
+        .data2(alu_data2),
         .aluop(aluop),
         .result(ALUResult),
         .overflow(overflow)
@@ -45,9 +65,9 @@ module EX(
     MULT_DIV MULT_DIV(
         .clk(clk),
         .reset(rst),
-        .rs_E_i(data1),
-        .rt_E_i(data1),
-        .mult_div_op_i(mult_div_op),
+        .rs_E_i(alu_data1),
+        .rt_E_i(alu_data1),
+        .mult_div_op_E_i(mult_div_op),
         .hi_o(hi),
         .lo_o(lo),
         .busy_o(busy)
