@@ -59,7 +59,7 @@ module DATAPATH(
     
     wire [31:0] harzard_ctrl_SEL, harzard_ctrl_EX, harzard_ctrl_MEM1, harzard_ctrl_MEM2, harzard_ctrl_WB;
     
-    wire stall, wrong_guess, not_jump, clrIF2_IF2;
+    wire stall, wrong_guess, not_jump, clrIF2_IF2, trap;
     
     wire ins_addr_exl_IF1, ins_addr_exl_IF2, ins_addr_exl_DE, ins_addr_exl_SEL, ins_addr_exl_EX, ins_addr_exl_MEM1;
     wire ins_in_delay_DE, ins_in_delay_SEL, ins_in_delay_EX, ins_in_delay_MEM1;
@@ -74,6 +74,7 @@ module DATAPATH(
         .clk(clk),
         .rst(rst),
         .stall(stall),
+        .trap(trap),
         .jump(jump),
         .newpc(newpc),
         .instr_addr(pc_IF1),
@@ -85,7 +86,7 @@ module DATAPATH(
         .clk(clk),
         .rst(rst),
         .en(~stall),
-        .clrIF2_IF1(wrong_guess & ~stall),
+        .clrIF2_IF1((wrong_guess & ~stall) | trap),
         .clrIF2_IF2(clrIF2_IF2),
         .pc_in(pc_IF1),
         .pc4_out(pc4_IF2),
@@ -97,7 +98,7 @@ module DATAPATH(
         .clk(clk),
         .rst(rst),
         .en(~stall),
-        .clr((wrong_guess & ~stall) | clrIF2_IF2),
+        .clr((wrong_guess & ~stall) | clrIF2_IF2 | trap),
         .instr_IF2(instr_IF2),
         .pc4_IF2(pc4_IF2),
         .instr_DE(instr_DE),
@@ -127,6 +128,7 @@ module DATAPATH(
         .clk(clk),
         .rst(rst),
         .en(~stall),
+        .clr(trap),
         .instr_DE(instr_DE),
         .pc4_DE(pc4_DE),
         .rd1_DE(rd1_DE),
@@ -187,7 +189,8 @@ module DATAPATH(
         .reserved_ins_exl(reserved_ins_exl_SEL),
         .data1_sel(data1_sel_SEL),
         .data2_sel(data2_sel_SEL),
-        .data2_imme(data2_imme_SEL)
+        .data2_imme(data2_imme_SEL),
+        .EPC(EPC)
     );
     
     HARZARD_STALL HARZARD_STALL(
@@ -203,13 +206,16 @@ module DATAPATH(
         .T_new_3(harzard_ctrl_MEM2[2:0]),
         .mult_div_op(mult_div_op_SEL),
         .busy_EX(busy_EX),
+        .instr_SEL(instr_SEL),
+        .instr_EX(instr_EX),
+        .instr_MEM1(instr_MEM1),
         .stall(stall)
     );
     
     SEL_EX SEL_EX(
         .clk(clk),
         .rst(rst),
-        .clr(stall),
+        .clr(stall | trap),
         .aluop_SEL(aluop_SEL),
         .mult_div_op_SEL(mult_div_op_SEL),
         .data1_SEL(data1_SEL),
@@ -314,6 +320,7 @@ module DATAPATH(
     EX_MEM1 EX_MEM1(
         .clk(clk),
         .rst(rst),
+        .clr(trap),
         .pc8_EX(pc8_EX),
         .instr_EX(instr_EX),
         .aluresult_EX(aluresult_EX),
@@ -410,6 +417,7 @@ module DATAPATH(
         .break_exl_M(break_exl),
         .reserved_ins_exl_M(reserved_ins_exl_MEM1),
         .pc_M(PC_MEM1),
+        .Exl_set(trap),
         .EPC(EPC),
         .eret_M(eret),
         .CP0_we_M_i(CP0_we),
@@ -422,6 +430,7 @@ module DATAPATH(
     MEM1_MEM2 MEM1_MEM2(
         .clk(clk),
         .rst(rst),
+        .clr(trap),
         .pc8_MEM1(pc8_MEM1),
         .instr_MEM1(instr_MEM1),
         .aluresult_MEM1(aluresult_MEM1),

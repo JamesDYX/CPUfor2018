@@ -40,7 +40,7 @@ module CP0(
     input [31:0] pc_M,
     
     output reg [31:0] EPC,
-    output Exl_set,         //未使用
+    output Exl_set,
     
     //异常处理程序结束
     input eret_M,

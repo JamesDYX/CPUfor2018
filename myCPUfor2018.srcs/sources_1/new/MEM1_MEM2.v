@@ -23,6 +23,7 @@
 module MEM1_MEM2(
     input clk,
     input rst,
+    input clr,
     input [31:0] pc8_MEM1,
     input [31:0] instr_MEM1,
     input [31:0] aluresult_MEM1,
@@ -42,7 +43,7 @@ module MEM1_MEM2(
     );
     
     always @(posedge clk) begin
-        if(rst) begin
+        if(rst | clr) begin
             pc8_MEM2<=0;
             instr_MEM2<=0;
             aluresult_MEM2<=0;

@@ -23,6 +23,7 @@
 module DE_SEL(
     input clk,
     input rst,
+    input clr,
     input en,
     input [31:0] instr_DE,
     input [31:0] pc4_DE,
@@ -45,7 +46,7 @@ module DE_SEL(
     );
     
     always @(posedge clk) begin
-        if(rst) begin
+        if(rst | clr) begin
             instr_SEL<=0;
             pc4_SEL<=0;
             rd1_SEL<=0;

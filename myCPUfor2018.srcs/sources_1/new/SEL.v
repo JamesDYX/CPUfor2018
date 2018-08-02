@@ -56,7 +56,8 @@ module SEL(
     input [31:0] data_4,
     output not_jump,
     output next_in_delay,
-    output reserved_ins_exl
+    output reserved_ins_exl,
+    input [31:0] EPC
     );
     
     wire [1:0] ext_sel;
@@ -131,7 +132,8 @@ module SEL(
         .newpc(newpc),
         .jump(jump),
         .not_jump(not_jump),
-        .next_in_delay(next_in_delay)
+        .next_in_delay(next_in_delay),
+        .EPC(EPC)
     );
     
 endmodule

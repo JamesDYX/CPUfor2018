@@ -1,0 +1,10 @@
+Vivado Simulator 2018.1
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module testbench_cpu.uut.IM.inst.native_mem_module.blk_mem_gen_v8_4_1_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module testbench_cpu.uut.DM.inst.native_mem_module.blk_mem_gen_v8_4_1_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+$ 8 <= 50000000
+$ 8 <= 50005000
+$ 8 <= 00005000
+$ 8 <= 0000a000

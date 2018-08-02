@@ -33,6 +33,11 @@ module HARZARD_STALL(
     input [2:0] T_new_3,
     input [3:0] mult_div_op,
     input busy_EX,
+    
+    //ERET
+    input [31:0] instr_SEL,
+    input [31:0] instr_EX,
+    input [31:0] instr_MEM1,
     output stall
     );
     
@@ -42,5 +47,7 @@ module HARZARD_STALL(
                    (rs==rd_2 & rs!=0 & T_use_rs<T_new_2) | 
                    (rt==rd_2 & rt!=0 & T_use_rt<T_new_2) |
                    (rs==rd_3 & rs!=0 & T_use_rs<T_new_3) | 
-                   (rt==rd_3 & rt!=0 & T_use_rt<T_new_3);
+                   (rt==rd_3 & rt!=0 & T_use_rt<T_new_3) |
+                   (instr_SEL==`ERET  & instr_EX[31:21]==`MTC0 & instr_EX[`RD]==5'b01110 & instr_EX[2:0]==3'b000) | 
+                   (instr_SEL==`ERET  & instr_MEM1[31:21]==`MTC0 & instr_MEM1[`RD]==5'b01110 & instr_MEM1[2:0]==3'b000);
 endmodule

@@ -24,6 +24,7 @@ module Branch(
     input [31:0] data1,
     input [31:0] data2,
     input [31:0] pc4,
+    input [31:0] EPC,
     output [31:0] newpc,
     output jump,
     output not_jump,
@@ -45,6 +46,7 @@ module Branch(
                           (instr[`OPCODE]==`JAL)? {newpc_2,1'b1, 1'b1}:
                           (instr[`OPCODE]==6'b0 && instr[`FUNC]==`JR)? {data1,1'b1, 1'b1}:
                           (instr[`OPCODE]==6'b0 && instr[`FUNC]==`JALR)? {data1,1'b1, 1'b1}:
+                          (instr==`ERET)? {EPC,1'b1, 1'b1}:
                           {32'h0000_0000,1'b0, 1'b0};
   assign not_jump =       ({instr[`OPCODE],instr[`RT]}==`BGEZAL && $signed(data1)<0)? 1'b1:
                           ({instr[`OPCODE],instr[`RT]}==`BLTZAL && $signed(data1)>=0)? 1'b1:
