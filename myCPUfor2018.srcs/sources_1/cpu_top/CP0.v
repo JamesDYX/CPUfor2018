@@ -23,13 +23,16 @@
 module CP0(
     input clk,
     input reset,
-    input StallF,               //Î´Ê¹ÓÃ
-    input icache_ins_addr_ok_i, //Î´Ê¹ÓÃ
+    input StallF,               //Î´Ê¹ï¿½ï¿½
+    input icache_ins_addr_ok_i, //Î´Ê¹ï¿½ï¿½
     
-    //Òì³£ÐÅºÅ
+    //Ó²ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Åºï¿½
+    input [5:0] hdint,
+    
+    //ï¿½ì³£ï¿½Åºï¿½
     input ins_addr_exl_M,
     input [31:0] error_ins_addr_M,
-    input ins_in_delay_M,   //Ö¸Áî´¦ÓÚÑÓ³Ù²ÛÖÐ
+    input ins_in_delay_M,   //Ö¸ï¿½î´¦ï¿½ï¿½ï¿½Ó³Ù²ï¿½ï¿½ï¿½
     input overflow_M,
     input MemWrite_M,
     input data_addr_exl_M,
@@ -42,7 +45,7 @@ module CP0(
     output reg [31:0] EPC,
     output Exl_set,
     
-    //Òì³£´¦Àí³ÌÐò½áÊø
+    //ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     input eret_M,
     
     //mtc0
@@ -58,18 +61,18 @@ module CP0(
     );
     
     wire local_Exl_set;
-    //CP0¼Ä´æÆ÷
-    reg [31:0] BadVAddr;    //±àºÅ8£¬Ö»¶Á£¬±£´æ×ÅÉÏÒ»´ÎµØÖ·Òì³£·¢ÉúÖ¸ÁîËùÓÃµ½µÄ´íÎóÐéµØÖ·
-    reg [31:0] Status;      //12£¬¿É¶ÁÐ´£¬
-    // Status[15:8]:¾ßÌåÖÐ¶ÏÆÁ±ÎÎ»£¬1£ºÖÐ¶ÏÔÊÐí 0£ºÖÐ¶ÏÆÁ±Î
-    //Status[1]: 0: ÔÊÐíÀýÍâ  1£º·¢ÉúÀýÍâ    1µÄ×´Ì¬ÏÂÆÁ±ÎËùÓÐÒì³£ºÍÖÐ¶Ï£¬Òì³£´¦Àí³ÌÐò·µ»ØÊ±ÖÃ0
-    //Status[0] : È«¾ÖÖÐ¶ÏÊ¹ÄÜ 1£ºÔÊÐíËùÓÐÖÐ¶Ï  0£ºÆÁ±ÎËùÓÐÖÐ¶Ï
-    reg [31:0] Cause;       //13, ÖÐ¶ÏµÈ´ý±êÊ¶£¬  Ö»ÄÜÐ´Cause[9:8]         Cause[31]:±êÊ¶×î½ü·¢ÉúµÄÀýÍâÖ¸ÁîÊÇ·ñ´¦ÓÚÑÓ³Ù²ÛÖÐ
+    //CP0ï¿½Ä´ï¿½ï¿½ï¿½
+    reg [31:0] BadVAddr;    //ï¿½ï¿½ï¿½8ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Îµï¿½Ö·ï¿½ì³£ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
+    reg [31:0] Status;      //12ï¿½ï¿½ï¿½É¶ï¿½Ð´ï¿½ï¿½
+    // Status[15:8]:ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½1ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
+    //Status[1]: 0: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    1ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½Ê±ï¿½ï¿½0
+    //Status[0] : È«ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½  0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+    reg [31:0] Cause;       //13, ï¿½Ð¶ÏµÈ´ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½  Ö»ï¿½ï¿½Ð´Cause[9:8]         Cause[31]:ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ó³Ù²ï¿½ï¿½ï¿½
     wire [31:0] local_EPC;
     
-    wire [6:2] ExcCode;     //ÀýÍâ±àÂë
-    wire Int_set;    //·¢ÉúÖÐ¶Ï£¬Í¨¹ýCause¼Ä´æÆ÷IP²¿·ÖÖÐµÈ´ý·¢ÉúµÄÖÐ¶ÏºÍStatusÖÐµÄÖÐ¶ÏÊ¹ÄÜÅÐ¶ÏÖÐ¶ÏÊÇ·ñ·¢Éú
-    wire Exc_set;   //·¢ÉúÀýÍâ
+    wire [6:2] ExcCode;     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    wire Int_set;    //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½Í¨ï¿½ï¿½Causeï¿½Ä´ï¿½ï¿½ï¿½IPï¿½ï¿½ï¿½ï¿½ï¿½ÐµÈ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ïºï¿½Statusï¿½Ðµï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
+    wire Exc_set;   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     
     reg mark;
     reg stall_mark;
@@ -80,10 +83,10 @@ module CP0(
                 (rd_addr_M_i == 5'b01110 && sel_M_i == 3'b000) ? EPC :
                 32'h0000_0000;
     
-    //È«¾ÖÖÐ¶ÏÊ¹ÄÜ+Ã»ÓÐÀýÍâÔÚ´¦Àí
+    //È«ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½+Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½
     assign Int_set = (Status[0] == 1'b1) && (Status[1] == 1'b0) && ((Status[15:8] & Cause[15:8]) != 8'b0000_0000) ;
     assign Exc_set = Int_set | ins_addr_exl_M | overflow_M | syscall_exl_M | break_exl_M | reserved_ins_exl_M | data_addr_exl_M;
-    //°´ÕÕÀýÍâÓÅÏÈ¼¶ÅÅÐò
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½
     assign ExcCode = Int_set ? 5'h00 :
                    ins_addr_exl_M ? 5'h04 :
                    reserved_ins_exl_M ? 5'ha :
@@ -93,7 +96,7 @@ module CP0(
                    (data_addr_exl_M & ~MemWrite_M) ? 5'h04 :
                    (data_addr_exl_M & MemWrite_M) ? 5'h05 :
                    5'h00;
-    //ÀýÍâ·¢Éú
+    //ï¿½ï¿½ï¿½â·¢ï¿½ï¿½
     assign local_Exl_set = (Status[1] == 1'b0) && Exc_set;
     assign Exl_set = local_Exl_set || mark || stall_mark;
     assign local_EPC = ins_in_delay_M ? (pc_M - 32'd4) : pc_M;
@@ -103,7 +106,9 @@ module CP0(
             if(reset)
                 begin
                     BadVAddr <= 32'h0000_0000;
-                    Status[31:16] <= 16'h0000;
+                    Status[31:23] <= 9'b000000000;
+                    Status[22]<=1'b1;
+                    Status[21:16]<=6'b000000;
                     Status[15:8] <= 8'b1111_1111;
                     Status[7:2] <= 6'b000000;
                     Status[1] <= 1'b0;
@@ -111,8 +116,10 @@ module CP0(
                     Cause <= 32'h0000_0000;
                     EPC <= 32'hbfc0_0000; 
                 end
-            else if(local_Exl_set)
-                begin
+            else begin
+                Cause[15:10]<=hdint;
+                if(local_Exl_set)
+                    begin
                     Status[1] <= 1;
                     Cause[6:2] <= ExcCode;
                     EPC <= local_EPC;
@@ -121,24 +128,25 @@ module CP0(
                                 (ExcCode == 5'h05) ? error_data_addr_M :
                                 BadVAddr;
                     Cause[31] <= ins_in_delay_M;
-                end
-            else if(eret_M)
-                begin
+                    end
+                else if(eret_M)
+                    begin
                     Status[1] <= 0;
-                end
-            else if(CP0_we_M_i && (rd_addr_M_i == 5'b01100)  && (sel_M_i == 3'b000))
-                begin
+                    end
+                else if(CP0_we_M_i && (rd_addr_M_i == 5'b01100)  && (sel_M_i == 3'b000))
+                    begin
                     Status[15:8] <= rt_M_i[15:8];
                     Status[1:0] <= rt_M_i[1:0];
-                end
-            else if(CP0_we_M_i && (rd_addr_M_i == 5'b01101) && (sel_M_i == 3'b000))
-                begin
+                    end
+                else if(CP0_we_M_i && (rd_addr_M_i == 5'b01101) && (sel_M_i == 3'b000))
+                    begin
                     Cause[9:8] <= rt_M_i[9:8];
-                end
-            else if(CP0_we_M_i && (rd_addr_M_i == 5'b01110) && (sel_M_i == 3'b000))
-                begin
+                    end
+                else if(CP0_we_M_i && (rd_addr_M_i == 5'b01110) && (sel_M_i == 3'b000))
+                    begin
                     EPC <= rt_M_i;
-                end
+                    end
+            end
         end
     
     always@(posedge clk)

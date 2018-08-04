@@ -18,7 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`include "define.v"
 
 module DECODER(
     input [31:0] instr,
@@ -67,7 +66,7 @@ module DECODER(
                    (instr[`OPCODE]==`SB || instr[`OPCODE]==`SH || instr[`OPCODE]==`SW)? {4'd9,2'b01}:
                    ({instr[`OPCODE],instr[`RT]}==`BGEZAL)? {4'd15,2'b10}:
                    ({instr[`OPCODE],instr[`RT]}==`BLTZAL)? {4'd15,2'b10}:
-                   (instr[`OPCODE]==`JALR)? {4'd15,2'b10}:
+                   (instr[`OPCODE]==6'b0 && instr[`FUNC]==`JALR)? {4'd15,2'b10}:
                    (instr[`OPCODE]==`JAL)? {4'd15,2'b10}:
                    (instr[31:21]==`MFC0)? {4'd15,2'b10}:
                    {4'd15,2'b00};

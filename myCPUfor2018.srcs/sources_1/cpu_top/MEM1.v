@@ -25,12 +25,14 @@ module MEM1(
     input mwen,
     input [1:0] memop,
     input [31:0] aluresult,
+    input [31:0] rd2_MEM1,
     output [3:0] wea,
     output data_addr_exl,
     output syscall_exl,
     output break_exl,
     output eret,
-    output CP0_we
+    output CP0_we,
+    output [31:0] wdata
     );
     
     assign wea[0] = mwen & ~aluresult[1] & ~aluresult[0];
@@ -47,4 +49,9 @@ module MEM1(
     assign break_exl = instr[`OPCODE]==6'b0 && instr[`FUNC]==`BREAK;
     assign eret = instr==`ERET;
     assign CP0_we = instr[31:21]==`MTC0;
+    
+    assign wdata = instr[`OPCODE]==`SH? {2{rd2_MEM1[15:0]}}:
+                   instr[`OPCODE]==`SB? {4{rd2_MEM1[7:0]}}:
+                   rd2_MEM1;
+    
 endmodule

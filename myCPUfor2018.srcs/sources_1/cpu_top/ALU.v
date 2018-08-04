@@ -31,21 +31,21 @@ module ALU(
     assign tmp = aluop==0? {data1[31],data1}+{data2[31],data2}:
                  aluop==1? {data1[31],data1}-{data2[31],data2}:
                  0;
-    assign result = aluop==0? tmp[31:0]:  //¿¼ÂÇÒç³öµÄ¼Ó·¨
-                    aluop==1? tmp[31:0]:  //¿¼ÂÇÒç³öµÄ¼õ·¨
+    assign result = aluop==0? tmp[31:0]:  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼Ó·ï¿½
+                    aluop==1? tmp[31:0]:  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
                     aluop==2? data1&data2:
                     aluop==3? data1|data2:
                     aluop==4? data1^data2:
                     aluop==5? ($signed(data1)<$signed(data2)?1:0):
-                    aluop==6? data2 << data1:
-                    aluop==7? data2 >> data1:
-                    aluop==8? $signed(data2)>>>$signed(data1):
-                    aluop==9? data1+data2:  //²»¿¼ÂÇÒç³öµÄ¼Ó·¨
-                    aluop==10? data1-data2: //²»¿¼ÂÇÒç³öµÄ¼õ·¨
+                    aluop==6? data2 << data1[4:0]:
+                    aluop==7? data2 >> data1[4:0]:
+                    aluop==8? $signed($signed(data2)>>>data1[4:0]):
+                    aluop==9? data1+data2:  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼Ó·ï¿½
+                    aluop==10? data1-data2: //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
                     aluop==11? (data1<data2?1:0):
                     aluop==12? ~(data1|data2):
                     aluop==13? data2:
                     0;
-     assign overflow = (aluop==1 | aluop==2) & (tmp[32]!=tmp[31]);
+     assign overflow = (aluop==1 | aluop==0) & (tmp[32]!=tmp[31]);
                     
 endmodule

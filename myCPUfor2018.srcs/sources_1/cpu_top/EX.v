@@ -31,11 +31,14 @@ module EX(
     input data2_sel,
     input [31:0] data2_imme,
     input [4:0] sa,
+    input [31:0] hi_MEM1,
+    input [31:0] lo_MEM1,
     output [31:0] hi,
     output [31:0] lo,
     output busy,
     output [31:0] ALUResult,
-    output overflow
+    output overflow,
+    input withdraw
     );
     
     wire [31:0] alu_data1, alu_data2;
@@ -66,11 +69,14 @@ module EX(
         .clk(clk),
         .reset(rst),
         .rs_E_i(alu_data1),
-        .rt_E_i(alu_data1),
+        .rt_E_i(alu_data2),
         .mult_div_op_E_i(mult_div_op),
         .hi_o(hi),
         .lo_o(lo),
-        .busy_o(busy)
+        .busy_o(busy),
+        .withdraw(withdraw),
+        .hi_MEM(hi_MEM1),
+        .lo_MEM(lo_MEM1)
     );
     
 endmodule

@@ -2,64 +2,63 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/s
 INFO: [VRFC 10-311] analyzing module DM
 INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/ip/IM/sim/IM.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module IM
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/ALU.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/ALU.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ALU
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/Branch.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/Branch.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module Branch
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/CP0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/CP0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module CP0
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module DATAPATH
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DE.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/DATAPATH.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/DE.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module DE
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DECODER.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/DECODER.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module DECODER
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DE_SEL.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/DE_SEL.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module DE_SEL
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/EX.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/EX.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module EX
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/EX_MEM1.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/EX_MEM1.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module EX_MEM1
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/FORWARD_DATA_MUX.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/FORWARD_DATA_MUX.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module FORWARD_DATA_MUX
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/GRF.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/GRF.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module GRF
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/HARZARD_STALL.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/HARZARD_STALL.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HARZARD_STALL
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/HAZARD_FORWARD.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/HAZARD_FORWARD.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HAZARD_FORWARD
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/IF1.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/IF1.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module IF1
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/IF1_IF2.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/IF1_IF2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module IF1_IF2
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/IF2_DE.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/IF2_DE.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module IF2_DE
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/MEM1.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/MEM1.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MEM1
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/MEM1_MEM2.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/MEM1_MEM2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MEM1_MEM2
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/MEM2_WB.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/MEM2_WB.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MEM2_WB
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/MULT_DIV.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/MULT_DIV.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MULT_DIV
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/MUX.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module MUX_GRF
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/MUX.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MUX_EXT
 INFO: [VRFC 10-311] analyzing module MUX_DATA1
 INFO: [VRFC 10-311] analyzing module MUX_DATA2
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/SEL.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/SEL.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module SEL
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/SEL_EX.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/SEL_EX.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module SEL_EX
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/SEXT.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/SEXT.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module SEXT
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/WB.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/WB.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module WB
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/div_model.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/div_model.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module div_model
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/mult_model.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/cpu_top/mult_model.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mult_model
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/soc_sram.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/soc_myself/soc_sram.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module soc_sram
 INFO: [VRFC 10-2263] Analyzing Verilog file "D:/myCPUfor2018/myCPUfor2018.srcs/sim_1/new/testbench_cpu.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module testbench_cpu

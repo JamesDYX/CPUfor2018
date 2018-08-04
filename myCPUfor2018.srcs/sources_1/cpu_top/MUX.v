@@ -19,21 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module MUX_GRF(
-    input [1:0] reg_sel,
-    input [4:0] rt,
-    input [4:0] rd,
-    output [4:0] wreg
-    );
-    
-    assign wreg = reg_sel==0? rd:
-                  reg_sel==1? rt:
-                  reg_sel==2? 5'd31:
-                  rd;
-                  
-endmodule
-
 module MUX_EXT(
     input [31:0] unsign_imme,
     input [31:0] sign_imme,

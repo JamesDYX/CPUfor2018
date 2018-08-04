@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`define INIT_PC 32'h0003_0000
+`define INIT_PC 32'hbfbf_fffc
 `define TRAP_PC 32'hbfc0_0380
 
 `define OPCODE 31:26

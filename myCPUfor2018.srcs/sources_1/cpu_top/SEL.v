@@ -57,12 +57,17 @@ module SEL(
     output not_jump,
     output next_in_delay,
     output reserved_ins_exl,
-    input [31:0] EPC
+    input [31:0] EPC,
+    output forward_WB_rs,   //forward data of WB back to rs
+    output forward_WB_rt,
+    output clr_delay_slot
     );
     
     wire [1:0] ext_sel;
     
     assign pc8_out = pc4_in + 4;
+    assign forward_WB_rs = data1==data_4;
+    assign forward_WB_rt = data2==data_4;
     
     DECODER DECODER(
         .instr(instr_in),
@@ -133,7 +138,8 @@ module SEL(
         .jump(jump),
         .not_jump(not_jump),
         .next_in_delay(next_in_delay),
-        .EPC(EPC)
+        .EPC(EPC),
+        .clr_delay_slot(clr_delay_slot)
     );
     
 endmodule

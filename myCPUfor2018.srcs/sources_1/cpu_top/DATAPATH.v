@@ -20,20 +20,48 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module DATAPATH(
+module mycpu_top(
     input clk,
-    input rst,
+    input resetn,       //低电平有效
+    input [5:0] int,
     
-    output [31:0] pc_IF1,
-    output ena_IF1,
-    input [31:0] instr_IF2,
+    output inst_sram_en,
+    output [3:0] inst_sram_wen,
+    output [31:0] inst_sram_addr,
+    output [31:0] inst_sram_wdata,
+    input [31:0] inst_sram_rdata,
     
-    output [3:0] wea_MEM1,
-    output [31:0] aluresult_MEM1,
-    output [31:0] rd2_MEM1_in,
-    output ena_MEM1,
-    input [31:0] mdata_MEM2
+    output data_sram_en,
+    output [3:0] data_sram_wen,
+    output [31:0] data_sram_addr,
+    output [31:0] data_sram_wdata,
+    input [31:0] data_sram_rdata,
+    
+    //共验证平台使用的信号
+    output [31:0] debug_wb_pc,
+    output [3:0] debug_wb_rf_wen,
+    output [4:0] debug_wb_rf_wnum,
+    output [31:0] debug_wb_rf_wdata
     );
+    
+    //Sram接口
+    wire rst;
+    wire ena_IF1, ena_MEM1;
+    wire [31:0] pc_IF1, aluresult_MEM1;
+    wire [31:0] instr_IF2, mdata_MEM2;
+    wire [3:0] wea_MEM1;
+    wire [31:0] rd2_MEM1_in;
+    assign rst = ~resetn;
+    assign inst_sram_en = ena_IF1;
+    assign inst_sram_wen = 4'b0;
+    assign inst_sram_addr = pc_IF1;
+    assign inst_sram_wdata = 32'b0;
+    assign instr_IF2 = inst_sram_rdata;
+    
+    assign data_sram_en = ena_MEM1;
+    assign data_sram_wen = wea_MEM1;
+    assign data_sram_addr = aluresult_MEM1;
+    assign mdata_MEM2 = data_sram_rdata;
     
     wire [31:0] pc4_IF2, pc4_DE, pc4_SEL, pc8_SEL, pc8_EX, pc8_MEM1, pc8_MEM2, pc8_WB;
     wire [31:0] instr_DE, instr_SEL, instr_EX, instr_MEM1, instr_MEM2, instr_WB;
@@ -42,14 +70,13 @@ module DATAPATH(
     
     wire [31:0] reg_data_EX, reg_data_MEM1, reg_data_MEM2, reg_data_WB;
     wire reg_wen_SEL, reg_wen_EX, reg_wen_MEM1, reg_wen_MEM2, reg_wen_WB;
-    wire [1:0] reg_sel_WB;
-    wire [4:0] reg_rt_WB, reg_rd_WB;
+    wire [4:0] wreg;
     wire mwen_SEL, mwen_EX, mwen_MEM1;
     wire [31:0] data1_SEL, data2_SEL, data1_EX, data2_EX, data1_EX_in, data2_EX_in;
     
     wire [31:0] newpc;
     wire jump;
-    wire [3:0] aluop_SEL, aluop_EX, mult_div_op_SEL, mult_div_op_EX;
+    wire [3:0] aluop_SEL, aluop_EX, mult_div_op_SEL, mult_div_op_EX, mult_div_op_MEM1;
     wire [1:0] memop_SEL, memop_EX, memop_MEM1;
     
     wire [31:0] hi_EX, lo_EX, aluresult_EX, hi_MEM1, lo_MEM1, hi_MEM2, lo_MEM2, aluresult_MEM2, hi_WB, lo_WB, aluresult_WB;
@@ -59,7 +86,7 @@ module DATAPATH(
     
     wire [31:0] harzard_ctrl_SEL, harzard_ctrl_EX, harzard_ctrl_MEM1, harzard_ctrl_MEM2, harzard_ctrl_WB;
     
-    wire stall, wrong_guess, not_jump, clrIF2_IF2, trap;
+    wire stall, wrong_guess, not_jump, clrIF2_IF2, trap, withdraw_mult_div;
     
     wire ins_addr_exl_IF1, ins_addr_exl_IF2, ins_addr_exl_DE, ins_addr_exl_SEL, ins_addr_exl_EX, ins_addr_exl_MEM1;
     wire ins_in_delay_DE, ins_in_delay_SEL, ins_in_delay_EX, ins_in_delay_MEM1;
@@ -85,7 +112,7 @@ module DATAPATH(
     IF1_IF2 IF1_IF2(
         .clk(clk),
         .rst(rst),
-        .en(~stall),
+        .en(~stall | trap),
         .clrIF2_IF1((wrong_guess & ~stall) | trap),
         .clrIF2_IF2(clrIF2_IF2),
         .pc_in(pc_IF1),
@@ -114,9 +141,7 @@ module DATAPATH(
         .pc4_in(pc4_DE),
         .data(reg_data_WB),
         .wen(reg_wen_WB),
-        .reg_sel(reg_sel_WB),
-        .rt(reg_rt_WB),
-        .rd(reg_rd_WB),
+        .wreg(wreg),
         .rd1(rd1_DE),
         .rd2(rd2_DE),
         .sign_imme(sign_imme_DE),
@@ -124,11 +149,13 @@ module DATAPATH(
         .imme_tohigh(imme_tohigh_DE)
     );
     
+    wire forward_WB_rs, forward_WB_rt, clr_delay_slot;
+    
     DE_SEL DE_SEL(
         .clk(clk),
         .rst(rst),
         .en(~stall),
-        .clr(trap),
+        .clr(trap | (clr_delay_slot & ~stall)),
         .instr_DE(instr_DE),
         .pc4_DE(pc4_DE),
         .rd1_DE(rd1_DE),
@@ -146,7 +173,10 @@ module DATAPATH(
         .ins_addr_exl_DE(ins_addr_exl_DE),
         .ins_addr_exl_SEL(ins_addr_exl_SEL),
         .ins_in_delay_DE(ins_in_delay_DE),
-        .ins_in_delay_SEL(ins_in_delay_SEL)
+        .ins_in_delay_SEL(ins_in_delay_SEL),
+        .reg_data_WB(reg_data_WB),
+        .forward_WB_rs(forward_WB_rs),
+        .forward_WB_rt(forward_WB_rt)
     );
     
     wire [31:0] data2_imme_SEL, data2_imme_EX;
@@ -190,7 +220,10 @@ module DATAPATH(
         .data1_sel(data1_sel_SEL),
         .data2_sel(data2_sel_SEL),
         .data2_imme(data2_imme_SEL),
-        .EPC(EPC)
+        .EPC(EPC),
+        .forward_WB_rs(forward_WB_rs),
+        .forward_WB_rt(forward_WB_rt),
+        .clr_delay_slot(clr_delay_slot)
     );
     
     HARZARD_STALL HARZARD_STALL(
@@ -274,7 +307,7 @@ module DATAPATH(
         .T_new_3(harzard_ctrl_WB[2:0]),
         .data_3(reg_data_WB),
         .rd_4(5'b0),
-        .T_new_4(1'b0),
+        .T_new_4(3'b0),
         .data_4(32'b0),
         .data_out(data1_EX_in)
     );
@@ -292,7 +325,7 @@ module DATAPATH(
         .T_new_3(harzard_ctrl_WB[2:0]),
         .data_3(reg_data_WB),
         .rd_4(5'b0),
-        .T_new_4(1'b0),
+        .T_new_4(3'b0),
         .data_4(32'b0),
         .data_out(data2_EX_in)
     );
@@ -301,7 +334,7 @@ module DATAPATH(
         .clk(clk),
         .rst(rst),
         .aluop(aluop_EX),
-        .mult_div_op(mult_div_op_EX),
+        .mult_div_op(trap? 4'b0 : mult_div_op_EX),
         .data1(data1_EX_in),
         .data2(data2_EX_in),
         .data1_sel(data1_sel_EX),
@@ -310,9 +343,12 @@ module DATAPATH(
         .sa(instr_EX[`SA]),
         .hi(hi_EX),
         .lo(lo_EX),
+        .hi_MEM1(hi_MEM1),
+        .lo_MEM1(lo_MEM1),
         .ALUResult(aluresult_EX),
         .busy(busy_EX),
-        .overflow(overflow_EX)
+        .overflow(overflow_EX),
+        .withdraw(withdraw_mult_div)
     );
     
     assign rd2_EX = data2_EX_in;
@@ -348,7 +384,9 @@ module DATAPATH(
         .reserved_ins_exl_EX(reserved_ins_exl_EX),
         .ins_addr_exl_MEM1(ins_addr_exl_MEM1),
         .ins_in_delay_MEM1(ins_in_delay_MEM1),
-        .reserved_ins_exl_MEM1(reserved_ins_exl_MEM1)  
+        .reserved_ins_exl_MEM1(reserved_ins_exl_MEM1),
+        .mult_div_op_EX(mult_div_op_EX),
+        .mult_div_op_MEM1(mult_div_op_MEM1)  
     );
     
     FORWARD_DATA_MUX FORWARD_DATA_MUX_MEM1(
@@ -371,10 +409,10 @@ module DATAPATH(
         .T_new_2(harzard_ctrl_WB[2:0]),
         .data_2(reg_data_WB),
          .rd_3(5'b0),
-        .T_new_3(1'b0),
+        .T_new_3(3'b0),
         .data_3(32'b0),
         .rd_4(5'b0),
-        .T_new_4(1'b0),
+        .T_new_4(3'b0),
         .data_4(32'b0),
         .data_out(rd2_MEM1_in)
     );
@@ -395,17 +433,21 @@ module DATAPATH(
         .syscall_exl(syscall_exl),
         .break_exl(break_exl),
         .eret(eret),
-        .CP0_we(CP0_we)
+        .CP0_we(CP0_we),
+        .rd2_MEM1(rd2_MEM1_in),
+        .wdata(data_sram_wdata)
     );
     
     wire [31:0] PC_MEM1;
     assign PC_MEM1 = pc8_MEM1-8;
+    assign withdraw_mult_div = trap & mult_div_op_MEM1!=4'b0 & mult_div_op_MEM1!=4'b0101 & mult_div_op_MEM1!=4'b0110;
     
     CP0 CP0(
         .clk(clk),
         .reset(rst),
         .StallF(1'b0),
         .icache_ins_addr_ok_i(1'b1),
+        .hdint(int),
         .ins_addr_exl_M(ins_addr_exl_MEM1),
         .error_ins_addr_M(PC_MEM1),
         .ins_in_delay_M(ins_in_delay_MEM1),
@@ -491,8 +533,13 @@ module DATAPATH(
         .lo(lo_WB),
         .CP0(CP0_WB),
         .reg_data(reg_data_WB),
-        .reg_rt(reg_rt_WB),
-        .reg_rd(reg_rd_WB),
-        .reg_sel(reg_sel_WB)
+        .wreg(wreg)
     );
+    
+   //debug锟脚猴拷
+    assign debug_wb_pc = pc8_WB-8;
+    assign debug_wb_rf_wen = {4{reg_wen_WB}};
+    assign debug_wb_rf_wnum = wreg;
+    assign debug_wb_rf_wdata = reg_data_WB;
+    
 endmodule

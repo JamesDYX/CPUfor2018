@@ -45,7 +45,7 @@ module GRF(
         end
         else if(wen && wreg!=0) begin
             registers[wreg] <= data;
-            $display("$%d <= %h", wreg,data);
+//            $display("$%d <= %h", wreg,data);
         end
     end
 endmodule

@@ -6,4 +6,5 @@ Exception at PC 0x00007FF84B2FA388
 Exception at PC 0x00007FF84B2FA388
 Exception at PC 0x00007FF84B2FA388
 Exception at PC 0x00007FF84B2FA388
+Unable to capture context for thread 20188 in process 12128, can not generate back trace
 Exception at PC 0x00007FF84B2FA388

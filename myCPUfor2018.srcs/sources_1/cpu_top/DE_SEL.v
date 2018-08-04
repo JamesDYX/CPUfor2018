@@ -34,6 +34,9 @@ module DE_SEL(
     input [31:0] imme_tohigh_DE,
     input ins_addr_exl_DE,
     input ins_in_delay_DE,
+    input [31:0] reg_data_WB,
+    input forward_WB_rs,        //forward WB's data back to SEL's rs
+    input forward_WB_rt,
     output reg [31:0] instr_SEL,
     output reg [31:0] pc4_SEL,
     output reg [31:0] rd1_SEL,
@@ -67,6 +70,10 @@ module DE_SEL(
             imme_tohigh_SEL<=imme_tohigh_DE;
             ins_addr_exl_SEL<=ins_addr_exl_DE;
             ins_in_delay_SEL<=ins_in_delay_DE;
+        end
+        else begin
+            if(forward_WB_rs) rd1_SEL<=reg_data_WB;
+            if(forward_WB_rt) rd2_SEL<=reg_data_WB;
         end
     end
     

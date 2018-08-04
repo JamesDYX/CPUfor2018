@@ -3,10 +3,6 @@ Copyright 1986-1999, 2001-2017 Xilinx, Inc. All Rights Reserved.
 Running: D:/Vivado/2018.1/bin/unwrapped/win64.o/xelab.exe -wto 5d997b0142a240f1ab228876f938affe --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_1 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot testbench_cpu_behav xil_defaultlib.testbench_cpu xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_4 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:277]
-WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_4 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:295]
-WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_3 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:374]
-WARNING: [VRFC 10-278] actual bit length 1 differs from formal bit length 3 for port T_new_4 [D:/myCPUfor2018/myCPUfor2018.srcs/sources_1/new/DATAPATH.v:377]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
@@ -14,7 +10,6 @@ Time Resolution for simulation is 1ps
 Compiling module xil_defaultlib.IF1
 Compiling module xil_defaultlib.IF1_IF2
 Compiling module xil_defaultlib.IF2_DE
-Compiling module xil_defaultlib.MUX_GRF
 Compiling module xil_defaultlib.GRF
 Compiling module xil_defaultlib.SEXT
 Compiling module xil_defaultlib.DE
@@ -40,7 +35,7 @@ Compiling module xil_defaultlib.CP0
 Compiling module xil_defaultlib.MEM1_MEM2
 Compiling module xil_defaultlib.MEM2_WB
 Compiling module xil_defaultlib.WB
-Compiling module xil_defaultlib.DATAPATH
+Compiling module xil_defaultlib.mycpu_top
 Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_output_stage(...
 Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_output_stage(...
 Compiling module blk_mem_gen_v8_4_1.blk_mem_gen_v8_4_1_softecc_outpu...

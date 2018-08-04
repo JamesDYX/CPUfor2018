@@ -26,12 +26,10 @@ module MULT_DIV(
     
     input [31:0] rs_E_i,
     input [31:0] rt_E_i,
-//    input [31:0] ALUResult_ED_i,
-//    input [31:0] ALUResult_M_i,
-//    input [31:0] DataToReg_W_i,
-//    input [1:0] Forward_rs_E_i,     //00:rs_E 01:ALUResult_ED_i  11:ALUResult_m_i   10:DataToReg_W_i
-//    input [1:0] Forward_rt_E_i,
-    input [3:0] mult_div_op_E_i,      //0000:·Ç³Ë³ýÏà¹ØÖ¸Áî 0001:mult 0010:multu  0011:div  0100:divu  0101:mfhi  0110:mflo  0111:mthi  1000:mtlo
+    input withdraw,                   //role back when trap
+    input [31:0] hi_MEM,
+    input [31:0] lo_MEM,
+    input [3:0] mult_div_op_E_i,      //0000:ï¿½Ç³Ë³ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ 0001:mult 0010:multu  0011:div  0100:divu  0101:mfhi  0110:mflo  0111:mthi  1000:mtlo
     output reg [31:0] hi_o,
     output reg [31:0] lo_o,
     output busy_o
@@ -64,7 +62,7 @@ module MULT_DIV(
      
 //    wire [31:0] temp_rs;
 //    wire [31:0] temp_rt;
-//    wire rt_e_zero;     //rtÎª0ÐÅºÅ
+//    wire rt_e_zero;     //rtÎª0ï¿½Åºï¿½
 //    assign temp_rs = (Forward_rs_E_i == 2'b00) ? rs_E_i :
 //                       (Forward_rs_E_i == 2'b01) ? ALUResult_ED_i :
 //                       (Forward_rs_E_i == 2'b11) ? ALUResult_M_i :
@@ -78,21 +76,21 @@ module MULT_DIV(
     
     div_model div(
         .clk(clk),
-        .reset(reset),
-        .start(div_start),    //¿ªÊ¼¼ÆËã
-        .div_op(div_op),   //0: ÎÞ·ûºÅ  1£ºÓÐ·ûºÅ
+        .reset(reset | withdraw),
+        .start(div_start),    //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+        .div_op(div_op),   //0: ï¿½Þ·ï¿½ï¿½ï¿½  1ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½
         .divisor(rt),
         .dividend(rs),
         .result_ok(div_result_ok),
-        .remainder(div_hi),   //ÓàÊý
-        .quotient(div_lo)    //ÉÌ
+        .remainder(div_hi),   //ï¿½ï¿½ï¿½ï¿½
+        .quotient(div_lo)    //ï¿½ï¿½
         );
        
     mult_model mul(
             .clk(clk),
-            .reset(reset),
+            .reset(reset | withdraw),
             .start(mult_start),
-            .mult_op(mult_op),   //0: ÎÞ·ûºÅ  1£ºÓÐ·ûºÅ
+            .mult_op(mult_op),   //0: ï¿½Þ·ï¿½ï¿½ï¿½  1ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½
             .rs(rs),
             .rt(rt),
             .result_ok(mult_result_ok),
@@ -114,7 +112,19 @@ module MULT_DIV(
                     mult_start <= 0;
                     mult_op <= 0;
                 end
-            //³Ë³ý·¨ 0001:mult 0010:multu 0011:div  0100:divu
+            //ï¿½Ë³ï¿½ï¿½ï¿½ 0001:mult 0010:multu 0011:div  0100:divu
+            else if(withdraw)
+                begin
+                    rs <= 0;
+                    rt <= 1;
+                    hi_o <= hi_MEM;
+                    lo_o <= lo_MEM;
+                    local_busy <= 0;
+                    div_start <= 0;
+                    div_op <= 0;
+                    mult_start <= 0;
+                    mult_op <= 0;
+                end
             else if((mult_en | div_en) && ~local_busy)
                 begin
 //                    rs <= temp_rs;

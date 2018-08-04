@@ -19,7 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "define.v"
 module WB(
     input [31:0] instr,
     input [31:0] pc8,
@@ -29,9 +28,7 @@ module WB(
     input [31:0] lo,
     input [31:0] CP0,
     output [31:0] reg_data,
-    output [4:0] reg_rt,
-    output [4:0] reg_rd,
-    output [1:0] reg_sel
+    output [4:0] wreg
     );
     
     wire [15:0] hdata_tmp;
@@ -44,10 +41,10 @@ module WB(
                        mdata[31:24];
     
     assign reg_data = instr[`OPCODE]==`LW? mdata:
-                      instr[`OPCODE]==`LH? {16'h0000, hdata_tmp}:
-                      instr[`OPCODE]==`LHU? {{16{hdata_tmp[15]}}, hdata_tmp}:
-                      instr[`OPCODE]==`LB? {24'h0000_00, bdata_tmp}:
-                      instr[`OPCODE]==`LBU? {{24{bdata_tmp[7]}}, bdata_tmp}:
+                      instr[`OPCODE]==`LHU? {16'h0000, hdata_tmp}:
+                      instr[`OPCODE]==`LH? {{16{hdata_tmp[15]}}, hdata_tmp}:
+                      instr[`OPCODE]==`LBU? {24'h0000_00, bdata_tmp}:
+                      instr[`OPCODE]==`LB? {{24{bdata_tmp[7]}}, bdata_tmp}:
                       (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MFHI)? hi:
                       (instr[`OPCODE]==6'b000000 && instr[`FUNC]==`MFLO)? lo:
                       instr[`OPCODE]==`JAL? pc8:
@@ -57,11 +54,9 @@ module WB(
                       (instr[31:21]==`MFC0)? CP0:
                       aluresult;
                       
-     assign reg_rt = instr[`RT];
-     assign reg_rd = instr[`RD];
-     assign reg_sel = (instr[`OPCODE]==6'b000000)? 2'b00:
-                      instr[`OPCODE]==`JAL? 2'b10:
-                      {instr[`OPCODE], instr[`RT]}==`BGEZAL? 2'b10:
-                      {instr[`OPCODE], instr[`RT]}==`BLTZAL? 2'b10:
-                      2'b01;
+     assign wreg = (instr[`OPCODE]==6'b000000)? instr[`RD]:
+                   instr[`OPCODE]==`JAL? 5'd31:
+                   {instr[`OPCODE], instr[`RT]}==`BGEZAL? 5'd31:
+                   {instr[`OPCODE], instr[`RT]}==`BLTZAL? 5'd31:
+                   instr[`RT];
 endmodule

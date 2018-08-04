@@ -18,7 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`include "define.v"
 
 module IF1(
     input clk,
@@ -34,17 +33,17 @@ module IF1(
     
     reg [31:0] PC;
     assign instr_addr = PC;
-    assign ins_addr_exl = instr_addr[1:0]!=2'b0;
+    assign ins_addr_exl = instr_addr[1:0]!=2'b0 || instr_addr[31:20]>12'hbfc;
     assign wrong_guess = jump & (newpc!=PC-4);
     always @(posedge clk) begin
         if (rst) begin
             PC <= `INIT_PC;
         end
+        else if(trap) begin
+            PC <= `TRAP_PC;
+        end
         else if(~stall) begin
-            if(trap) begin
-                PC <= `TRAP_PC;
-            end
-            else if(wrong_guess)
+            if(wrong_guess)
                 PC <= newpc;
             else 
                 PC <= PC+4;

@@ -24,22 +24,22 @@ module testbench_cpu;
 
 	// Inputs
 	reg clk;
-	reg reset;
+	reg resetn;
 
 	// Instantiate the Unit Under Test (UUT)
 	soc_sram uut (
 		.clk(clk), 
-		.rst(reset)
+		.rstn(resetn)
 	);
 
 	initial begin
 		// Initialize Inputs
 		clk = 1;
-		reset = 1;
+		resetn = 0;
 
 		
-		#95;
-		reset = 0;
+		#100;
+		resetn = 1;
 //		#100;
 //		reset = 1;
 //		#100;
